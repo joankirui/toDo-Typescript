@@ -1,11 +1,43 @@
-/**
- * This file is just a silly example to show everything working in the browser.
- * When you're ready to start on your site, clear the file. Happy hacking!
- **/
+const item = document.querySelector<HTMLInputElement>("#item");
+const toDoBox = document.querySelector<HTMLDivElement>("#to-do-box");
 
-import confetti from 'canvas-confetti';
+if (item) {
+item.addEventListener(
+  'keyup', 
+  function (event) 
+  {
+      if (event.key == "Enter") {
+          addToDo(this.value)
+          this.value = ""
+      }
+  }
+  )
+}
 
-confetti.create(document.getElementById('canvas') as HTMLCanvasElement, {
-  resize: true,
-  useWorker: true,
-})({ particleCount: 200, spread: 200 });
+const addToDo = (item: string) => {
+  if (!item || !toDoBox) return; // Ensure item and toDoBox are not null
+  
+    const listItem = document.createElement("li");
+    listItem.innerHTML = `
+        ${item}
+    <i class="fas fa-times"></i>
+    `;
+
+    listItem.addEventListener(
+        "click", 
+        function () {
+            this.classList.toggle("done");
+        }
+    )
+
+    const deleteIcon = listItem.querySelector("i");
+    if (deleteIcon) {
+      deleteIcon.addEventListener(
+          "click", 
+          function () {
+              listItem.remove();
+          }
+        )
+      }
+      toDoBox.appendChild(listItem);
+}
